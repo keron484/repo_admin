@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinnnersingle } from "../components/Spinners";
 function Layout(){
-    const { user, getadmin, toggle  } = useAuthContext();
+    const { user, getadmin, toggle, istoggled  } = useAuthContext();
     const navigate = useNavigate();
     useEffect(() => {
         if(user == null || user === ''){
@@ -18,9 +18,11 @@ function Layout(){
         <>
         <Modal />
          <div className="d-flex" id="wrapper">
-            <nav className="sidebar d-flex flex-column pb-1">
+         <nav className={ istoggled ?  "sidebar-two flex-column d-flex pb-1" : "sidebar d-flex flex-column pb-1"}>
                     <div className="nav-title d-flex flex-row px-1 justify-content-between  text-white  py-2">
-                        <p className="my-0 fw-bold">Pet Haven Admin</p>
+                        <p className="my-0 fw-bold">
+                            <img src="./logo/logo.png" alt="" className="logo-app"/>
+                        </p>
                     </div>
                    <div className="d-flex flex-row justify-content-between text-white align-items-center mt-5 mx-2">
                      <div className="d-flex flex-row justify-content-start text-white align-items-center gap-2">
@@ -80,6 +82,12 @@ function Layout(){
                     </NavLink>
                     </div>
                     <div className="my-3">
+                    <NavLink className={({isActive}) => isActive ? "link link-active" : "link"} to="/applications">
+                        <p className="my-0 mx-1">Applications</p>
+                        <Icon icon="dashicons:email-alt" className="fs-5 mx-1"/>
+                    </NavLink>
+                    </div>
+                    <div className="my-3">
                     <NavLink className={({isActive}) => isActive ? "link link-active" : "link"} to="/messages">
                         <p className="my-0 mx-1">Messages</p>
                         <Icon icon="icon-park-solid:message" className="fs-5 mx-1"/>
@@ -108,12 +116,10 @@ function Layout(){
                         onClick={toggle}
                         />
                         <div className="d-flex flex-row gap-3 ms-auto">
-                            <div className="noti-badge">
-                                <button className="noti">1</button>
+                            <div className="noti-badge">   
                             <Icon icon="icon-park-solid:message" />
                             </div>
                             <div className="noti-badge">
-                            <button className="noti">1</button>
                             <Icon icon="mdi:bell" />
                             </div>
                         </div>

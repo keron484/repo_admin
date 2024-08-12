@@ -15,12 +15,14 @@ function Dashboard(){
           axios.get('api/get-petcategory'),
           axios.get('api/getall-messages'),
           axios.get('api/admins'),
+          axios.get('api/applications')
         ]);
   
         const { data: pakages } = responses[0];
         const { data: messages } = responses[1];
         const { data: adminData } = responses[2];
-        setData({ petcategories: pakages, messages: messages, admin: adminData });
+        const { data: applications } = responses[3];
+        setData({ petcategories: pakages, messages: messages, admin: adminData, applications: applications });
       } catch (error) {
         setError({ ...error, message: error.message });
       } finally {
@@ -77,7 +79,20 @@ function Dashboard(){
                 <div className="card border-none shadow-sm px-2 py-2 theme-color">
                 <div className="d-flex flex-row align-items-center">
                     <div className="card logo d-flex flex-row align-items-center justify-content-center border-none">
-                    <Icon icon="gridicons:multiple-messagess" className="fs-4 c-pet"/>
+                    <Icon icon="mdi:application-edit"  className="fs-3 c-pet"/>
+                    </div>
+                    <div className="d-block mx-2 text-white">
+                      <h1 className="fs-5 fw-bolder my-0">{data.applications.applications.length > 0 ? data.applications.applications.length : 0}</h1>
+                      <p className="my-0 fs-12">Application</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-lg-6 my-1">
+                <div className="card border-none shadow-sm px-2 py-2 theme-color">
+                <div className="d-flex flex-row align-items-center">
+                    <div className="card logo d-flex flex-row align-items-center justify-content-center border-none">
+                    <Icon icon="wpf:message" className="fs-4 c-pet"/>
                     </div>
                     <div className="d-block mx-2 text-white">
                       <h1 className="fs-5 fw-bolder my-0">{data.messages.messages.length > 0 ? data.messages.messages.length : 0}</h1>
@@ -87,7 +102,33 @@ function Dashboard(){
                 </div>
               </div>
             </div>
-            <div className="card w-100 rounded-4 border-none shadow-sm px-4 py-2 mt-4 theme-color text-white">
+            <div className="card w-100 border-none shadow-sm px-3 py-2 rounded-4 my-3 theme-color text-white table-responsive small">
+             <div className="d-flex flex-row align-items-center my-3 c-green">
+              <Icon icon="mdi:application-edit"   className="fs-4 c-pet"/>
+               <h1 className="fs-6 fw-bold my-0 mx-2 c-pet">Application</h1>
+              </div>
+              <table className="table table-dark">
+                <thead></thead>
+                <tbody>
+              {
+                 data.applications.applications.length > 0 ? Reduce_array_size(data.applications.applications, 0, 5).map((items) => (
+                  <tr key={items.id}>
+                  <td>{items.user.name}</td>
+                  <td>{Number(items.pet.price).toFixed(0)}$</td>
+                  <td>{items.pet.breed}</td>
+                  <td>{FormatDate(items.created_at)}</td>
+                </tr>
+                 )) : 
+                 (
+                  <div className="alert alert-warning">
+                    Opps no pet category has been added
+                  </div>
+                 )
+              }
+              </tbody>
+                 </table>
+             </div>
+            <div className="card w-100 rounded-4 border-none shadow-sm px-4 py-2 mt-4 theme-color text-white pb-4">
               <div className="d-flex flex-row align-items-center my-2 c-green">
               <Icon icon="mdi:worker" className="fs-4 c-pet"/>
                <h1 className="fs-6 fw-bold my-0 mx-2 c-pet">Admins</h1>
