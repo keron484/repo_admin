@@ -18,3 +18,7 @@ export const filter_by_status = (array, value) => {
 export const filter_by_id = (array, value) => {
      return array.filter((items) => items.id === value );
 }
+
+export const filter_element_by_id = (array, value) => {
+    return array.filter((items) => items.id !== value);
+}

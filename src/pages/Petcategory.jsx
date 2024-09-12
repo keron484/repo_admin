@@ -2,7 +2,8 @@ import { Icon } from "@iconify-icon/react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import { useState, useEffect } from "react";
-import { FormatDate, filter_by_id } from "../Utils/Functions";
+import { filter_element_by_id } from "../Utils/Functions";
+import { toast }  from "react-hot-toast";
 function Petcategory(){
     const [ Data, setData ] = useState([]);
     const [ deleteError, setDeleteerror ] = useState(null); 
@@ -26,13 +27,16 @@ function Petcategory(){
     const handle_delete = async (id) => {
          try{
             await axios.delete(`api/delete-petcategory/${id}`);
-            setData(filter_by_id(Data, id));
+            setData(filter_element_by_id(Data, id));
+            toast.success("Pet category deleted succesully");
+
          }
          catch(e){
              if(e.response){
                 const errorData = e.response.data;
                 setDeleteerror(errorData.delete);
              }
+             toast.error("Opps something went wrong!!")
          }
     }
     return(
@@ -87,10 +91,9 @@ function Petcategory(){
                              <tr key={items.id}>
                              <td>{items.id}</td>
                              <td>{items.name}</td>
-                             <td>{FormatDate(items.created_at)}</td>
-                             <td>{FormatDate(items.updated_at)}</td>
+                             
                              <td>
-                             <div className="d-flex flex-row">
+                             <div className="d-flex flex-row gap-3">
                                <div>
                                <Link className="link">
                             <Icon icon="mdi:trash" className="fs-4 text-danger" 

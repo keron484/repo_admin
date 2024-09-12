@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     setIstoggled((prevalue) => !prevalue);
  }
   return (
-    <AuthContext.Provider value={{ loginAdmin, errors, user, getadmin, errorMessage, toggle, istoggled }}>
+    <AuthContext.Provider value={{ loginAdmin, errors, user, getadmin, errorMessage, toggle, istoggled, setUser }}>
       {children}
     </AuthContext.Provider>
   );

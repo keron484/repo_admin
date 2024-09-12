@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { Spinnnersingle } from "../components/Spinners";
 import axios from "../api/axios";
+import toast from "react-hot-toast";
 function UpdateApplication(){
     const navigate = useNavigate();
     const { register, handleSubmit, reset } = useForm();
-    const [errorMessage, setErrorMessage] = useState(null);
     const [error, setError] = useState([]);
     const [loading, setLoading] = useState(null);
     const { id } = useParams();
@@ -17,11 +17,12 @@ function UpdateApplication(){
         reset();
         navigate("/applications");
         setLoading((prevalue) => prevalue = false);
+        toast.success("Application updated succesfully");
       } catch (error) {
         if (error.response) {
           const errorData = error.response.data;
           setLoading((prevalue) => prevalue = false);
-          setErrorMessage("An error occured while updating product");
+          toast.error("An error occured while updating product");
           setError(errorData.error);
         }
       }
@@ -45,22 +46,31 @@ function UpdateApplication(){
                   <h1 className="fs-5 text-center my-2 fw-bold">
                     Update Application
                   </h1>
-                  {errorMessage && (
-                    <div className="alert alert-danger">{errorMessage}</div>
-                  )}
                   <div className="my-2">
-                    <p className="fs-6 my-0">Status</p>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Enter Application status"
-                      name="status"
-                      {...register("status")}
-                    />
-                  </div>
-                  {error.status && (
-                    <div className="alert alert-danger">{error.status[0]}</div>
-                  )}
+                      <p className="fs-6 my-0">Application status</p>                  
+                    <select 
+                    class={
+                       error.status 
+                       ? "form-select border-danger"
+                       : "form-select"  
+                    }
+                    aria-label="Default select example"
+                    name="status"
+                    {...register("status")}
+                    >
+                    <option value={null}>
+                      <>
+                      Open to select status
+                      </>
+                    </option>
+                    <option value="Approved">Approved</option>
+                    <option value="Pending">Pending</option>
+                   </select>
+                   </div>
+                    {error.status && (
+                      <div className="text-danger">{error.status[0]}</div>
+                    )}
+                  
                   <button
                     className={
                       loading

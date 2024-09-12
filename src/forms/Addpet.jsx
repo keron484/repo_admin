@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form";
 import axios from "../api/axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 function Addpet() {
   const { register, handleSubmit, reset } = useForm();
-  const [errorMessage, setErrorMessage] = useState(null);
   const [category, setCategory] = useState([]);
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState([]);
@@ -17,6 +17,8 @@ function Addpet() {
     try {
       const formData = new FormData();
       formData.append("name", data.name);
+      formData.append("number_of_appication", data.number_of_appication);
+      formData.append("number_of_interested_persons", data.number_of_interested_persons);
       formData.append("species", data.species);
       formData.append("breed", data.breed);
       formData.append("age", data.age);
@@ -32,7 +34,7 @@ function Addpet() {
           "Content-Type": "multipart/form-data",
         },
       });
-      setErrorMessage(response.data.message);
+      toast.success(response.data.message);
       setLoading(false);
       navigate("/pet");
       reset();
@@ -41,7 +43,7 @@ function Addpet() {
         const errorData = e.response.data;
         setErrors(errorData.errors);
         console.table(errors);
-        setErrorMessage(errorData.message);
+        toast.error(errorData.message);
         setLoading(false);
       }
     }
@@ -78,11 +80,6 @@ function Addpet() {
           <form className="w-100" onSubmit={handleSubmit(handle_create)}>
             <div className="w-100 d-flex flex-row align-items-center justify-content-center mt-3">
               <div className="card border-none shadow-sm w-75 px-3 rounded-4 py-2 theme-color text-white">
-                {errorMessage && (
-                  <div className="alert alert-danger">
-                    <p>{errorMessage}</p>
-                  </div>
-                )}
                 <h1 className="fs-5 text-center my-2 fw-bold">Add Pet</h1>
                 <div className="row">
                   <div className="col-lg-6">
@@ -138,7 +135,7 @@ function Addpet() {
                       <div className="text-danger">{errors.pet_image[0]}</div>
                     )}
                     <div className="my-2">
-                      <p className="fs-6 my-0">Product Category</p>
+                      <p className="fs-6 my-0">Pet Category</p>
                       <select
                         className={
                           errors.petcategory_id
@@ -245,35 +242,45 @@ function Addpet() {
                       <div className="text-danger">{errors.age[0]}</div>
                     )}
                     <div className="my-2">
-                      <p className="fs-6 my-0">sex</p>
-                      <input
-                        type="text"
-                        className={
-                          errors.sex
-                            ? "form-control border-danger"
-                            : "form-control"
-                        }
-                        placeholder="Enter Pet Age"
-                        name="sex"
-                        {...register("sex")}
-                      />
-                    </div>
+                      <p className="fs-6 my-0">sex</p>                  
+                    <select 
+                    class={
+                       errors.sex 
+                       ? "form-select border-danger"
+                       : "form-select"  
+                    }
+                    aria-label="Default select example"
+                    name="sex"
+                    {...register("sex")}
+                    >
+                    <option value={null}>
+                      <>
+                      Open to select gender
+                      </>
+                    </option>
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                   </select>
+                   </div>
                     {errors.sex && (
                       <div className="text-danger">{errors.sex[0]}</div>
                     )}
+
                     <div className="my-2">
                       <p className="fs-6 my-0">Adoption status</p>
-                      <input
-                        type="text"
-                        className={
-                          errors.adoption_status
-                            ? "form-control border-danger"
-                            : "form-control"
-                        }
-                        placeholder="Enter Adoption Status"
-                        name="adoption_status"
+                      <select 
+                      className={
+                        errors.adoption_status ? 
+                        "form-select border-danger" :
+                        "form-select"
+                      }
+                      name="adoption_status"
                         {...register("adoption_status")}
-                      />
+                      aria-label="Default select example">
+                      <option selected>Open to select status</option>
+                     <option value="false">Not Adopted</option>
+                     <option value="true">Adopted</option>
+                     </select>
                     </div>
                     {errors.adoption_status && (
                       <div className="text-danger">
@@ -298,6 +305,42 @@ function Addpet() {
                       <div className="text-danger">{errors.description[0]}</div>
                     )}
                   </div>
+                  <div className="d-flex flex-row gap-3">
+                  <div className="my-2">
+                      <p className="fs-6 my-0">People</p>
+                      <input
+                        type="number"
+                        className={
+                          errors.number_of_interested_persons
+                            ? "form-control border-danger"
+                            : "form-control"
+                        }
+                        placeholder="Enter Number of interested persons"
+                        name="number_of_interested_persons"
+                        {...register("number_of_interested_persons")}
+                      />
+                    </div>
+                    {errors.number_of_interested_persons && (
+                      <div className="text-danger">{errors.number_of_interested_persons[0]}</div>
+                    )}
+                    <div className="my-2 d-block">
+                      <p className="fs-6 my-0">Applicants</p>
+                      <input
+                        type="text"
+                        className={
+                          errors.age
+                            ? "form-control border-danger"
+                            : "form-control"
+                        }
+                        placeholder="Enter number of applicants"
+                        name="number_of_appication"
+                        {...register("number_of_appication")}
+                      />
+                      {errors.number_of_appication && (
+                      <div className="text-danger">{errors.number_of_appication[0]}</div>
+                    )}
+                    </div>
+                  </div>
                 </div>
                 <button
                   className={
@@ -314,7 +357,7 @@ function Addpet() {
                       </div>
                     </>
                   ) : (
-                    <>Add Product</>
+                    <>Add Pet</>
                   )}
                 </button>
               </div>

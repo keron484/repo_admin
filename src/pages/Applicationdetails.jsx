@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FormatDate, filter_by_id } from "../Utils/Functions";
 import { Icon } from "@iconify-icon/react";
 import { Link } from "react-router-dom";
+import { toast } from  "react-hot-toast";
 function Applicationsdetails(){
     const [ deleteError, setDeleteerror ] = useState(null);
     const [ fetcherror, setFetcherror ] = useState(null);
@@ -32,11 +33,13 @@ function Applicationsdetails(){
          try{
             await axios.delete(`api/delete-message/${id}`);
             navigate('/applications');
+            toast.success("Application Deleted Succesfully");
          }
          catch(e){
             if(e.response){
                 const errorData = e.response.data;
                 setDeleteerror(errorData.message);
+                toast.error("Failed to deleted application");
             }
          }
      }

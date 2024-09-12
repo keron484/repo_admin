@@ -75,7 +75,7 @@ function Petdetails(){
                     pakage.map((items) => {
                         return(
                             <>
-                    <div className="card border-none shadow w-50 px-3 rounded-4 py-2 theme-color text-white" key={items.id}>
+                    <div className="card border-none shadow w-75 px-3 rounded-4 py-2 theme-color text-white" key={items.id}>
                     <h1 className="fs-5 text-center my-2 fw-bold">Pet Details</h1> 
                     <p className="text-end fs-12 my-3">#{items.id}</p>
                     <div className="my-2 d-flex justify-content-between">
@@ -102,7 +102,7 @@ function Petdetails(){
                     <p className="my-0">sex</p>     
                       <p>{items.sex}</p>     
                       </div>
-                      <div className="my-2 d-flex justify-content-between">
+                      <div className="my-2 d-block justify-content-between">
                     <p className="my-0">Description</p>     
                       <p>{items.description}</p>     
                       </div>

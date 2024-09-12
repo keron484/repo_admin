@@ -26,12 +26,6 @@ function Settings(){
                      <p className="my-0"><Icon icon="fa6-solid:chevron-right" className="fs-5 text-white"/></p>
                     </div>
                     </Link>
-                    <div className="mb-3">
-                     Display
-                    </div>
-                    <div className="mb-3">
-                     DarkMode
-                    </div>
                 </div>
                 </div>
                 <h1 className="fs-6 my-2 fw-bold text-white">Danger Zone</h1>

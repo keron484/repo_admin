@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom';
 import { Icon } from '@iconify-icon/react';
 import { useEffect, useState } from 'react';
 import axios from '../api/axios';
-import { filter_by_id } from '../Utils/Functions';
-import { FormatDate } from '../Utils/Functions';
+import { filter_element_by_id } from '../Utils/Functions';
+import toast from 'react-hot-toast';
 function Messages(){
     const [ Data, setData ] = useState([]);
     const [ deleteError, setDeleteerror ] = useState(null); 
@@ -26,13 +26,15 @@ function Messages(){
 
     const handle_delete = async (id) => {
          try{
-            await axios.delete();
-            setData(filter_by_id(Data, id));
+            await axios.delete(`api/delete-message/${id}`);
+            setData(filter_element_by_id(Data, id));
+            toast.success("Message deleted succesfully");
          }
          catch(e){
              if(e.response){
                 const errorData = e.response.data;
                 setDeleteerror(errorData.delete);
+                toast.error("Opps something went wrong");
              }
          }
     }
@@ -79,13 +81,9 @@ function Messages(){
                            return(
                             <>
                              <tr key={items.id}>
-                             <td>{items.id}</td>
-                             <td>{items.tracking_number}</td>
                              <td>{items.email}</td>
-                             <td>{FormatDate(items.updated_at)}</td>
-                             <td>{FormatDate(items.created_at)}</td>
                              <td>
-                             <div className="d-flex flex-row">
+                             <div className="d-flex flex-row gap-3">
                              <div>
                              <Link className="link">
                              <span><Icon icon="mdi:trash" className="fs-4 text-danger" 

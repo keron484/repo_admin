@@ -30,7 +30,7 @@ function Profile(){
                </>
             ) :  (
                <>
-               <div className="card border-none shadow w-50 px-3 rounded-4 py-2 theme-color text-white">
+               <div className="card border-none shadow w-75 px-3 rounded-4 py-2 theme-color text-white">
             <h1 className="fs-5 text-center my-2 fw-bold">My Account</h1>
              <div className="d-flex flex-row justify-content-center mb-3">
                 <div className="profile-box">

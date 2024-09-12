@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FormatDate, filter_by_id } from "../Utils/Functions";
 import { Icon } from "@iconify-icon/react";
 import { Link } from "react-router-dom";
-
+import { toast  } from 'react-hot-toast';
 function MessageDetails(){
   const [ deleteError, setDeleteerror ] = useState(null);
   const [ fetcherror, setFetcherror ] = useState(null);
@@ -33,11 +33,13 @@ function MessageDetails(){
        try{
           await axios.delete(`api/delete-message/${id}`);
           navigate('/messages');
+          toast.success("Message deleted succesfully");
        }
        catch(e){
           if(e.response){
               const errorData = e.response.data;
               setDeleteerror(errorData.message);
+              toast.error("Something went wrong !!");
           }
        }
    }

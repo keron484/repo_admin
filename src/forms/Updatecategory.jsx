@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { Spinnnersingle } from "../components/Spinners";
 import axios from "../api/axios";
+import toast from "react-hot-toast";
 function Updatecategory() {
   const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm();
-  const [errorMessage, setErrorMessage] = useState(null);
   const [error, setError] = useState([]);
   const [loading, setLoading] = useState(null);
   const { id } = useParams();
@@ -17,11 +17,12 @@ function Updatecategory() {
       reset();
       navigate("/pet-category");
       setLoading((prevalue) => prevalue = false);
+      toast.success("Pet category updated succesfully")
     } catch (error) {
       if (error.response) {
         const errorData = error.response.data;
         setLoading((prevalue) => prevalue = false);
-        setErrorMessage("An error occured while updating product");
+        toast.error("An error occured while updating product");
         setError(errorData.error);
       }
     }
@@ -45,9 +46,6 @@ function Updatecategory() {
                 <h1 className="fs-5 text-center my-2 fw-bold">
                   Update Pet Category
                 </h1>
-                {errorMessage && (
-                  <div className="alert alert-danger">{errorMessage}</div>
-                )}
                 <div className="my-2">
                   <p className="fs-6 my-0">Name</p>
                   <input

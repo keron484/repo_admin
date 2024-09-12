@@ -2,8 +2,9 @@ import { Icon } from "@iconify-icon/react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import { useState, useEffect } from "react";
-import { filter_by_id } from "../Utils/Functions";
-function Applications(){
+import { filter_element_by_id } from "../Utils/Functions";
+import { toast } from "react-hot-toast";
+ function Applications(){
     const [ Data, setData ] = useState([]);
     const [ deleteError, setDeleteerror ] = useState(null); 
     const [ fetcherror, setFetcherror ] = useState(null);
@@ -26,12 +27,14 @@ function Applications(){
     const handle_delete = async (id) => {
          try{
             await axios.delete(`api/delete-applicaiton/${id}`);
-            setData(filter_by_id(Data, id));
+            setData(filter_element_by_id(Data, id));
+            toast.success("Application deleted successfully");
          }
          catch(e){
              if(e.response){
                 const errorData = e.response.data;
                 setDeleteerror(errorData.delete);
+                toast.error("Something went wrong");
              }
          }
     }
@@ -78,13 +81,11 @@ function Applications(){
                            return(
                             <>
                              <tr key={items.id}>
-                             <td>{items.id}</td>
                              <td>{items.user.name}</td>
                              <td>{Number(items.pet.price).toFixed(0)}</td>
                              <td>{items.pet.name}</td>
-                             <td>{items.pet.breed}</td>
                              <td>
-                             <div className="d-flex flex-row">
+                             <div className="d-flex flex-row gap-3">
                                <div>
                                <Link className="link">
                             <Icon icon="mdi:trash" className="fs-4 text-danger" 

@@ -2,7 +2,8 @@ import { Icon } from "@iconify-icon/react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import { useState, useEffect } from "react";
-import { filter_by_id } from "../Utils/Functions";
+import { filter_element_by_id } from "../Utils/Functions";
+import { toast }  from "react-hot-toast";
 function Pet(){
     const [ Data, setData ] = useState([]);
     const [ deleteError, setDeleteerror ] = useState(null); 
@@ -23,16 +24,18 @@ function Pet(){
          handle_fetch();
     }, [])
 
-    const handle_delete = async (id) => {
+    const handle_delete = async (id, pet_name) => {
          try{
             await axios.delete(`api/delete-pet/${id}`);
-            setData(filter_by_id(Data, id));
+            setData(filter_element_by_id(Data, id));
+            toast.success(`${pet_name} deleted successfully`);
          }
          catch(e){
              if(e.response){
                 const errorData = e.response.data;
                 setDeleteerror(errorData.delete);
              }
+             toast.error(`Something went wrong trying to deleted ${pet_name}`);
          }
     }
     return(
@@ -81,8 +84,6 @@ function Pet(){
                       <thead className="text-center">
                         <th>Pet Name</th>
                         <th>Price</th>
-                        <th>Sex</th>
-                        <th>Image</th>
                         <th>Category</th>
                         <th>Action</th>
                       </thead>
@@ -93,19 +94,15 @@ function Pet(){
                             <>
                              <tr key={items.id}className="text-center">
                              <td className="text-center">{items.name}</td>
-                             <td>{items.price}</td>
-                             <td>{items.sex}</td>
-                             <td>
-                              <img src={require(`../../../server/public/petimages/${items.pet_image}`)} alt="" className="pet-img"/>
-                             </td>
+                             <td>{Number(items.price).toFixed(0)}</td>
                              <td>{items.category.name}</td>
                              <td className="text-center">
-                             <div className="d-flex flex-row">
+                             <div className="d-flex flex-row gap-3">
                              <div>
                              <Link className="link">
                              <span><Icon icon="mdi:trash" className="fs-4 text-danger" 
                               onClick={ () => {
-                                 handle_delete(items.id);
+                                 handle_delete(items.id, items.name);
                               }}
                              /></span>
                              </Link>

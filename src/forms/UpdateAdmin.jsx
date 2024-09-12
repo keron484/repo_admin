@@ -4,10 +4,10 @@ import axios from "../api/axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinnnersingle } from "../components/Spinners";
+import toast from "react-hot-toast";
 function UpdateAdmin() {
   const { id } = useParams();
   const { register, handleSubmit } = useForm();
-  const [ errorMsg, setErrormsg ] = useState(null);
   const [ errors, setErrors ] = useState([]);
   const [ loading, setLoading ] = useState(null);
   const navigate = useNavigate();
@@ -17,11 +17,12 @@ function UpdateAdmin() {
           await axios.put(`api/update-admin-profile/${id}`, data);
           setLoading((prevalue) => prevalue = false);
           navigate('/admin');
+          toast.success("Admin updated succesfully");
      }
      catch(e){
         if(e.response){
            const errorData = e.response.data;
-           setErrormsg("An error occured while updating Admin");
+           toast.error("An error occured while updating Admin");
            setErrors(errorData.errors);
            setLoading((prevalue) => prevalue = false);
         }
@@ -29,7 +30,7 @@ function UpdateAdmin() {
   }
   return (
     <>
-      <div className="d-flex flex-row align-items-center justify-content-between mt-3">
+      <div className="d-flex flex-row align-items-center justify-content-between mt-3 border-bottom pb-3">
         <h5 className="fw-bold text-white">Upadate Admin</h5>
         <div>
           <Link className="link" to="/admin">
@@ -39,13 +40,10 @@ function UpdateAdmin() {
       </div>
       <div className="row">
         <div className="col-lg-12">
-          <div className="w-100 d-flex flex-row align-items-center justify-content-center mt-3">
+          <div className="w-100 d-flex flex-row align-items-center justify-content-center mt-5">
               <div className="card border-none theme-color text-white shadow-sm w-75 px-3 rounded-4 py-2">
             <form action="" className="w-100" onSubmit={handleSubmit(handle_update)}>
-                <h1 className="fs-5 text-center my-2 fw-bold">Add Products</h1>
-                {errorMsg && (
-                  <div className="alert alert-danger">{errorMsg}</div>
-                )}
+                <h1 className="fs-5 text-center my-2 fw-bold">Update Admin</h1>
                 <div className="my-2">
                   <p className="fs-6 my-0">Username</p>
                   <input

@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 import { Icon } from "@iconify-icon/react";
+import toast from "react-hot-toast";
 import axios from "../api/axios";
 function Updatepet() {
   const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm();
-  const [errorMessage, setErrorMessage] = useState(null);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(null);
   const [category, setCategory] = useState([]);
@@ -20,11 +20,12 @@ function Updatepet() {
       reset();
       navigate("/pet");
       setLoading(false);
+      toast.success("Pet updated successfully");
     } catch (error) {
       if (error.response) {
         const errorData = error.response.data;
         setLoading(false);
-        setErrorMessage("An error occured while updating product");
+        toast.error("An error occured while updating product");
         setErrors(errorData.error);
       }
     }
@@ -60,11 +61,6 @@ function Updatepet() {
           <form action="" className="w-100" onSubmit={handleSubmit(onSubmit)}>
             <div className="w-100 d-flex flex-row align-items-center justify-content-center mt-3">
               <div className="card border-none shadow-sm w-75 px-3 rounded-4 py-2 theme-color text-white">
-                {errorMessage && (
-                  <div className="alert alert-danger">
-                    <p>{errorMessage}</p>
-                  </div>
-                )}
                 <h1 className="fs-5 text-center my-2 fw-bold">Add Pet</h1>
                 <div className="row">
                   <div className="col-lg-6">

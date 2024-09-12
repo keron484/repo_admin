@@ -2,24 +2,23 @@ import { useState } from "react";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "../api/axios";
+import toast from "react-hot-toast";
 function Replymessage(){
     const [errors, setErrors] = useState([]);
-    const [successMessage, setSuccessMessage] = useState(null);
-    const [errormessage, setErrormessage] = useState(null);
     const { reset, handleSubmit, register } = useForm();
     const navigate = useNavigate();
     const { email } = useParams();
     const onSubmit = async (data) => {
       try {
         const response = await axios.post("api/send-email", data);
-        setSuccessMessage(response.data.message);
+        toast.success(response.data.message);
         reset();
         navigate("/email");
       } catch (e) {
         if (e.response) {
           const errorData = e.response.data;
           setErrors(errorData.errors);
-          setErrormessage(errorData.message);
+          toast.error(errorData.message);
         }
       }
     };
@@ -38,12 +37,6 @@ function Replymessage(){
           <div className="col-lg-12">
             <div className="w-100 d-flex flex-row align-items-center justify-content-center mt-3">
               <div className="card border-none shadow-sm w-75 px-3 rounded-4 py-2 theme-color">
-                {errormessage && (
-                  <div className="alert alert-danger">{errormessage}</div>
-                )}
-                {successMessage && (
-                  <div className="alert alert-success">{successMessage}</div>
-                )}
                 <form
                   action=""
                   onSubmit={handleSubmit(onSubmit)}

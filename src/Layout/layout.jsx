@@ -6,17 +6,36 @@ import useAuthContext from "../context/authContext";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinnnersingle } from "../components/Spinners";
+import axios from "../api/axios";
+import  toast, { Toaster } from 'react-hot-toast';
 function Layout(){
-    const { user, getadmin, toggle, istoggled  } = useAuthContext();
+    const { user, getadmin, toggle, istoggled, setUser  } = useAuthContext();
     const navigate = useNavigate();
     useEffect(() => {
         if(user == null || user === ''){
             getadmin(navigate);
         }
-    })
+    }, []);
+    const handle_logout = async () => {
+         try{
+            const token = localStorage.getItem('token');
+             await axios.post('api/logout-admin', {
+                headers:{
+                    Authorization: `Bearer ${token}`
+                 }
+             });
+             setUser((prevalue) => prevalue = null);
+             navigate("/login");
+         }
+         catch(e){
+            toast.error("Opps something went wrong!!");  
+         }
+         
+    }
     return(
         <>
         <Modal />
+        <div> <Toaster /> </div>
          <div className="d-flex" id="wrapper">
          <nav className={ istoggled ?  "sidebar-two flex-column d-flex pb-1" : "sidebar d-flex flex-column pb-1"}>
                     <div className="nav-title d-flex flex-row px-1 justify-content-between  text-white  py-2">
@@ -102,7 +121,7 @@ function Layout(){
                         <Icon icon="material-symbols:settings" className="mx-1 fs-5"/>
                     </NavLink>
                    </div>
-                    <NavLink className="link text-danger">
+                    <NavLink className="link text-danger" onClick={() => { handle_logout(); }}>
                         <p className="my-0 mx-1">Logout</p>
                         <Icon icon="solar:logout-2-bold" className="mx-1 fs-5"/>
                     </NavLink>
@@ -115,14 +134,7 @@ function Layout(){
                         className="fs-4" 
                         onClick={toggle}
                         />
-                        <div className="d-flex flex-row gap-3 ms-auto">
-                            <div className="noti-badge">   
-                            <Icon icon="icon-park-solid:message" />
-                            </div>
-                            <div className="noti-badge">
-                            <Icon icon="mdi:bell" />
-                            </div>
-                        </div>
+                       
               </nav>
               <div className="container-fluid">
                  <Outlet />

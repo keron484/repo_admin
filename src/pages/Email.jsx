@@ -2,7 +2,8 @@ import { Icon } from "@iconify-icon/react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import { useState, useEffect } from "react";
-import { FormatDate } from "../Utils/Functions";
+import { filter_element_by_id} from "../Utils/Functions";
+import toast from "react-hot-toast";
 function Email(){
   const [ email, setEmail ] = useState([]);
   const [ loading, setLoading ] = useState(true);
@@ -26,10 +27,12 @@ function Email(){
   const handle_delete = async (id) => {
       try{
          await axios.delete(`api/delete-email/${id}`);
-         setEmail(email.filter((items) => items.id !== id));
+         setEmail(filter_element_by_id(email, id));
+         toast.success("email deleted succesfully");
       }
       catch{
          setDeleteerror("An error occured while deleting the email");
+         toast.error("Something went Wrong");
       }
   }
     return(
@@ -37,7 +40,7 @@ function Email(){
    <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3  mb-3 ">
     <div className="d-flex flex-row align-items-center">
       <span className="icon-badge"> <Icon icon="dashicons:email-alt" className=" fs-4 mt-2 c-pet"/></span>
-      <h1 className="fs-6 fw-bold text-white">Manage Mails</h1>
+      <h1 className="fs-6 fw-bold text-white">Emails Sent</h1>
     </div>
     <div className="d-flex mb-1">
     <Link className="link" to='/send-mail'>
@@ -81,11 +84,7 @@ function Email(){
                            return(
                             <>
                              <tr key={items.id}>
-                             <td>{items.id}</td>
-                             <td>{items.title}</td>
                              <td>{items.email}</td>
-                             <td>{items.name}</td>
-                             <td>{FormatDate(items.created_at)}</td>
                              <td>
                              <div className="d-flex">
                              <Link className="link">

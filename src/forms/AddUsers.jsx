@@ -2,22 +2,21 @@ import { Link } from "react-router-dom";
 import axios from "../api/axios";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import toast from "react-hot-toast"
 function Adduser() {
   const [errors, setErrors] = useState([]);
-  const [errorMessage, setErrormessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
   const { register, reset, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
     try {
       const response = await axios.post("api/create-user", data);
-      setSuccessMessage(response.data.message);
+      toast.success(response.data.message);
       reset();
     } catch (e) {
       if (e.response) {
         const errorData = e.response.data;
         setErrors(errorData.errors);
-        setErrormessage(errorData.message);
+        toast.error(errorData.message);
       }
     }
   };
@@ -36,12 +35,6 @@ function Adduser() {
         <div className="col-lg-12">
           <div className="w-100 d-flex flex-row align-items-center justify-content-center mt-3">
             <div className="card border-none shadow-sm w-75 px-3 rounded-4 py-2 theme-color text-white">
-              {errorMessage && (
-                <div className="alert alert-danger">{errorMessage}</div>
-              )}
-              {successMessage && (
-                <div className="alert alert-success">{successMessage}</div>
-              )}
               <form action="" onSubmit={handleSubmit(onSubmit)}>
                 <h1 className="fs-5 text-center my-2 fw-bold text-white">
                   Create Worker
